@@ -3,71 +3,148 @@ name: daily-tech-papers
 description: 每日全球技术论文推送。从 arXiv 获取最新的 AI/ML/NLP/CV 论文，定时推送给用户。当用户想要获取最新技术论文、设置论文推送、或需要了解 AI/ML 领域最新研究时使用此技能。
 ---
 
-# 每日技术论文推送技能
+# Daily Tech Papers - 每日技术论文推送
 
-此技能用于获取并推送全球最新的 AI/ML/NLP/CV 技术论文。
+让 AI 助手每天自动推送全球最新的 AI/ML/NLP/CV 技术论文。
 
-## 核心功能
+## 功能特点
 
-1. **抓取论文** - 从 arXiv RSS 获取 cs.AI、cs.LG、cs.CL、cs.CV 四个分类的最新论文
-2. **格式化消息** - 将论文整理为易读的飞书消息格式
-3. **定时推送** - 每天早上 9:00 自动推送
+- 📚 从 arXiv 获取最新论文
+- 🤖 支持 AI、机器学习、NLP、计算机视觉 4 个分类
+- ⏰ 支持定时自动推送
+- 📱 格式化输出，适配飞书/微信等平台
 
-## 论文分类标签
+## 安装
 
-| arXiv 分类 | 显示标签 | 说明 |
-|-----------|---------|------|
+### 方法 1: 使用 clawhub CLI（推荐）
+
+```bash
+clawhub install 18565878989/openclaw-daily-tech-papers
+```
+
+### 方法 2: 手动安装
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/18565878989/openclaw-daily-tech-papers.git
+```
+
+2. 复制技能文件到 OpenClaw：
+```bash
+cp -r daily-tech-papers ~/.openclaw/workspace/skills/
+```
+
+3. 复制脚本到 scripts 目录：
+```bash
+mkdir -p ~/.openclaw/workspace/scripts
+cp scripts/daily_tech_papers.py ~/.openclaw/workspace/scripts/
+```
+
+## 使用方法
+
+### 手动触发
+
+在 OpenClaw 中直接说：
+- 「推送今日论文」
+- 「最新技术论文」
+- 「AI 论文推送」
+
+### 定时推送设置
+
+在 OpenClaw 中设置 cron 任务：
+
+```
+每天早上 9:00 自动推送
+```
+
+示例 cron 配置：
+- 时间：`0 9 * * *` (Asia/Shanghai)
+- Session: isolated
+- 推送渠道: feishu
+
+## 论文分类
+
+| 分类 | 标签 | 说明 |
+|------|------|------|
 | cs.AI | 🤖 AI | 人工智能 |
 | cs.LG | 🧠 机器学习 | Machine Learning |
 | cs.CL | 💬 NLP | 自然语言处理 |
 | cs.CV | 👁️ 计算机视觉 | Computer Vision |
 
-## 消息格式
+## 推送效果示例
 
 ```
 📚 全球最新技术论文推送
-📅 YYYY年MM月DD日
-🔬 共推送 N 篇精选论文
+📅 2026年03月19日
+🔬 共推送 15 篇精选论文
 
 ━━━━━━━━━━━━━━━━━━━━
 
-1. 论文标题（截断70字符）
-👤 作者1, 作者2, 作者3
-📅 YYYY-MM-DD | 🤖 AI
-🔗 https://arxiv.org/abs/XXXX.XXXXX
+1. Transformers are Bayesian Networks
+👤 Gregory Coppola
+📅 2026-03-19 | 🤖 AI
+🔗 https://arxiv.org/abs/2603.17063
 
-2. ...
+2. AI Scientist via Synthetic Task Scaling
+👤 Ziyang Cai, Harkirat Behl
+📅 2026-03-19 | 🤖 AI
+🔗 https://arxiv.org/abs/2603.17216
+
+...
 
 ━━━━━━━━━━━━━━━━━━━━
 📌 来源: arXiv.org
 💡 想深入了解某篇论文？直接问我！
 ```
 
-## 使用方式
+## 脚本使用
 
-### 手动触发推送
+```bash
+# 直接运行
+python3 scripts/daily_tech_papers.py
+
+# JSON 格式输出（用于程序调用）
+python3 scripts/daily_tech_papers.py --feishu
 ```
-运行脚本：/usr/bin/python3 ~/.openclaw/workspace/scripts/daily_tech_papers.py
-```
 
-### 定时任务设置
-- **Cron 表达式**: `0 9 * * *`
-- **时区**: Asia/Shanghai
-- **Session**: isolated
-- **推送渠道**: feishu
+## 数据来源
 
-## 脚本位置
-
-`~/.openclaw/workspace/scripts/daily_tech_papers.py`
+- **arXiv.org** - 全球最大的预印本学术论文库
+- RSS Feed: `http://export.arxiv.org/rss/{category}`
 
 ## 依赖
 
-- Python 3
-- 标准库: urllib, xml.etree.ElementTree, email.utils, re, datetime, time
+- Python 3.7+
+- 标准库（无需额外安装）：
+  - `urllib`
+  - `xml.etree.ElementTree`
+  - `email.utils`
+  - `re`
+  - `datetime`
+  - `time`
 
-## 注意事项
+## 项目结构
 
-1. arXiv RSS 只返回最近更新，不包含历史论文
-2. 论文按发布时间排序，最多推送 15 篇
-3. 作者只显示前 3 位
-4. 标题截断至 70 字符以保持消息简洁
+```
+daily-tech-papers/
+├── SKILL.md           # 本文件 - 技能说明
+└── README.md          # 安装和使用说明
+
+scripts/
+└── daily_tech_papers.py  # 论文抓取脚本
+```
+
+## License
+
+MIT License
+
+## 作者
+
+- GitHub: [18565878989](https://github.com/18565878989)
+- OpenClaw Directory: [OpenClaw Directory](https://openclawdirectory.co.uk/)
+
+## 相关项目
+
+- [OpenClaw](https://openclaw.ai/) - AI 个人助手框架
+- [CLI-Anything](https://github.com/HKUDS/CLI-Anything) - 让任何软件都能被 AI 控制
+- [Awesome Claude Skills](https://github.com/ComposioHQ/awesome-claude-skills) - Claude 技能精选列表
